@@ -2,7 +2,7 @@ import pandas as pd
 
 df = pd.read_csv("train.csv", sep=";")
 
-
+print(df.head(5))
 def normalize_sum_ball(ball):
     ball = (ball - df['Сумма баллов'].min()) / (
             df['Сумма баллов'].max() - df['Сумма баллов'].min())

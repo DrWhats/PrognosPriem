@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import ds
+import model
+import json
 
 st.header("Прогнозирование поступления ПГГПУ")
 
@@ -75,7 +77,7 @@ with st.form("my_form"):
         agreement = st.checkbox('Итоговое согласие')
 
     with st.container(border=True):
-        total_points = st.text_input('Сумма баллов')
+        total_points = st.number_input('Сумма баллов')
 
     with st.container(border=True):
         total_achievements_points = st.number_input('Сумма баллов за индивидуальные достижения', min_value=0,
@@ -119,6 +121,31 @@ with st.form("my_form"):
         elif not settlement:
             st.error("Выберите населенный пункт")
         else:
+            params_dict = {
+                'Пол': 0 if sex == 'М' else 1,
+                'Льготы': 0 if benefit == False else 1,
+                'Нуждается в общежитии': 0 if hostel == False else 1,
+                'Иностранный язык': 1 if language == 'Изучался' else 0,
+                'Спорт': 0 if sport == False else 1,
+                'Служба в армии': 0 if army == False else 1,
+                'Полученное образование': education,
+                'Форма получения док. об образ.': document_educatuon,
+                'Вид возмещения затрат': 0 if pay_type == 'Договор' else 1,
+                'Форма обучения': education_form,
+                'Вид приема': reception_type,
+                'Формирующее подр.': department,
+                'Набор ОП': education_program,
+                'Целевой прием': 1 if targeted_reception == True else 0,
+                'Сумма баллов': ds.normalize_sum_ball(int(total_points)),
+                'Сумма баллов за индивидуальные достижения': ds.mormalize_achieve_ball(int(total_achievements_points)),
+                'Возраст': ds.normalize_Age(int(age)),
+                'Населённый пункт': settlement
+            }
+            print(params_dict)
             st.success("Загрузка...")
+            json_data = json.dumps(params_dict, ensure_ascii=False)
+            result = model.predict(json_data)
+            st.write("Результат прогноза:", "ПОСТУПИТ" if result == 1 else "НЕ ПОСТУПИТ")
+
 
 st.write(age)
