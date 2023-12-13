@@ -142,7 +142,6 @@ with st.form("my_form"):
                 'Населённый пункт': settlement
             }
             print(params_dict)
-            st.success("Загрузка...")
             json_data = json.dumps(params_dict, ensure_ascii=False)
             result = model.predict(json_data)
             if result == 0:
