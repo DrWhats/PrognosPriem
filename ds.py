@@ -50,6 +50,9 @@ def get_enroll_type():
     return df['Вид приема'].unique()
 
 
+# TODO
+# Перенести все этапы обработки данных перед предсказанием в единый пайплайн (читать "функцию"),
+# через которую будет прогоняться сырой датасет (выгрузка из ИС приемки).
 def prepare_df(new_df):
     pass
-    #return dataframe
+    # return dataframe
