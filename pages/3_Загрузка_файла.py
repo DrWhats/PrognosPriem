@@ -4,17 +4,21 @@ import ds
 import model
 import json
 import ds
+import streamlit.components.v1 as components
 
 st.header("Загрузка файла CSV для прогнозирования")
 
 uploaded_file = st.file_uploader("Выберите файл xlsx", type=["xlsx"])
 
 if uploaded_file is not None:
-    # try:
+    try:
+        st.success("Файл загружен. Делаем прогнозы.")
+        components.html(
+            "<image src='https://media1.tenor.com/m/FawYo00tBekAAAAC/loading-thinking.gif' width=100 height=100>")
+        st.text("Это заглушка и тут пока ничего не делается")
         df = pd.read_excel(uploaded_file, engine="openpyxl")
         st.dataframe(df)
-        df = ds.prepare_df(df)
-        
+        #df = ds.prepare_df(df)
 
         # Прогноз для каждой строки в файле
         results = []
@@ -42,15 +46,12 @@ if uploaded_file is not None:
             }
 
             json_data = json.dumps(params_dict, ensure_ascii=False)
-            result = model.predict(json_data)
-            results.append(result)
+            #result = model.predict(json_data)
+            #results.append(result)
 
         # Добавьте столбец с результатами в DataFrame
         df['Результат прогноза'] = results
         st.dataframe(df)
 
-    # except Exception as e:
-    #     st.error(f"Ошибка при чтении файла: {e}")
-
-
-
+    except Exception as e:
+        st.error(f"Ошибка при чтении файла: {e}")

@@ -146,6 +146,6 @@ with st.form("my_form"):
             json_data = json.dumps(params_dict, ensure_ascii=False)
             result = model.predict(json_data)
             if result == 0:
-                st.error("Результат прогноза:", "НЕ ПОСТУПИТ")
+                st.warning("Результат прогноза: НЕ ПОСТУПИТ")
             else:
-                st.success("Результат прогноза:", "ПОСТУПИТ")
+                st.success("Результат прогноза: ПОСТУПИТ")
